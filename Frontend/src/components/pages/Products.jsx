@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Navbar from '../layout/navbar';
-import Orders from './Order';
+import Orders from '../forms/OrderForm';
 
 const Products = () => {
   const [products, setProducts] = useState([]);
@@ -8,7 +8,6 @@ const Products = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
-    // Fetch products from the API
     const fetchProducts = async () => {
       try {
         const response = await fetch('http://localhost:8080/products');

@@ -20,21 +20,22 @@ router.post('/register', (req, res) => {
 });
 
 router.post('/login', (req, res) => {
-  const { email, password } = req.body;
-  db.query('SELECT * FROM users WHERE email = ?', [email], (err, results) => {
-    if (err) return res.status(500).json({ message: 'Error logging in' });
-    if (results.length === 0) return res.status(401).json({ message: 'User not found' });
-
-    const user = results[0];
-    bcrypt.compare(password, user.password, (err, match) => {
-      if (err) return res.status(500).json({ message: 'Error comparing passwords' });
-      if (!match) return res.status(401).json({ message: 'Invalid credentials' });
-
-      const token = jwt.sign({ id: user.id }, JWT_SECRET, { expiresIn: '1h' });
-      res.json({ token });
+    const { email, password } = req.body;
+    db.query('SELECT * FROM users WHERE email = ?', [email], (err, results) => {
+      if (err) return res.status(500).json({ message: 'Error logging in' });
+      if (results.length === 0) return res.status(401).json({ message: 'User not found' });
+  
+      const user = results[0];
+      bcrypt.compare(password, user.password, (err, match) => {
+        if (err) return res.status(500).json({ message: 'Error comparing passwords' });
+        if (!match) return res.status(401).json({ message: 'Invalid credentials' });
+  
+        const token = jwt.sign({ id: user.id }, JWT_SECRET, { expiresIn: '1h' });
+        res.json({ token, user }); // Include user object in response
+      });
     });
   });
-});
+  
 
 router.get('/protected', authenticateToken, (req, res) => {
   res.json({ message: 'This is a protected route', user: req.user });

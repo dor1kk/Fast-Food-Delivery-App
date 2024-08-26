@@ -1,13 +1,13 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { AuthProvider } from './context/authContext';
-import Home from './components/home/Home';
+import Home from './components/pages/Home';
 import Login from './components/auth/Login';
 import Register from './components/auth/Register';
 import Dashboard from './components/Dashboard';
 import ProtectedRoute from './components/layout/ProtectedRoute';
-import Orders from './components/home/Order';
-import Products from './components/home/Products';
+import Products from './components/pages/Products';
+import MyOrders from './components/pages/MyOrders';
 
 function App() {
   return (
@@ -20,7 +20,7 @@ function App() {
             <Route path="/dashboard" element={<Dashboard />} />
           </Route>
           <Route path="/home" element={<Home />}>
-            <Route path="orders" element={<Orders />} />
+            <Route path="my-orders" element={<MyOrders />} />
             <Route path="products" element={<Products />} />
           </Route>
         </Routes>

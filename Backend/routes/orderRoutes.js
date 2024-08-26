@@ -42,4 +42,17 @@ router.post('/', authenticateToken, async (req, res) => {
   }
 });
 
+
+router.get('/customer-orders', authenticateToken, (req, res) => {
+    const customerId = req.user.id;
+  
+    db.query('SELECT * FROM orders o inner join order_items oi on o.id=oi.order_id inner join products p on oi.product_id=p.id  WHERE customer_id = ?', [customerId], (err, results) => {
+      if (err) {
+        console.error('Error fetching orders:', err.message);
+        return res.status(500).json({ message: 'Server error' });
+      }
+      res.json(results);
+    });
+  });
+
 module.exports = router;

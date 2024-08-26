@@ -8,7 +8,7 @@ const Login = () => {
     password: '',
   });
 
-  const { setAuthToken, setUser } = useContext(AuthContext); // Retrieve setAuthToken and setUser from context
+  const { setAuthToken, setUser } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -30,11 +30,14 @@ const Login = () => {
       });
 
       if (response.ok) {
-        const { token, user } = await response.json();
+        const data = await response.json();
+        const { token, user } = data; // Extract token and user from response
+        console.log('API Response:', data); // Debug log
+
         setAuthToken(token);  
         setUser(user);  
-        alert('Login successful!');
-        navigate('/home', { state: { email: formData.email } });
+        console.log('Login successful:', user); // Debug log
+        navigate('/home');
       } else {
         alert('Login failed: ' + await response.text());
       }

@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { AuthContext } from '../../context/authContext';
 
-const Orders = ({ product, onClose }) => {
-  const { authToken, user } = useContext(AuthContext); // Use authToken from context
-  console.log('Retrieved Token:', authToken); // Log token to ensure it's being sent
+const OrderForm = ({ product, onClose }) => {
+  const { authToken, user } = useContext(AuthContext); 
+  console.log('Retrieved Token:', authToken);
 
   const [orderDetails, setOrderDetails] = useState({
     customer_name: user?.username || 'Guest',
@@ -129,7 +129,7 @@ const Orders = ({ product, onClose }) => {
                 className="w-full border rounded p-2 mt-1"
                 type="number"
                 value={orderDetails.total_price}
-                readOnly // Total price is calculated and should be read-only
+                readOnly 
               />
             </div>
             <div className="mt-4">
@@ -171,4 +171,4 @@ const Orders = ({ product, onClose }) => {
   );
 };
 
-export default Orders;
+export default OrderForm;
