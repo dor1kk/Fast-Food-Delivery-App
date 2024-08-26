@@ -1,0 +1,12 @@
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+
+{
+    "username":"Dori"
+}
+
+
+###
+
+GET http://localhost:8080/api/protected
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzI0NjY0MDg0LCJleHAiOjE3MjQ2Njc2ODR9.9wnhIVIIqzRI8CBu4tXnc2KCEtzM4J11wP_7MChne18
