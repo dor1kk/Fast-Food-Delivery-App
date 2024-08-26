@@ -13,10 +13,12 @@ app.use(bodyParser.json());
 const authRoutes = require('./routes/authRoutes');
 const productRoutes = require('./routes/productRoutes');
 const orderRoutes = require('./routes/orderRoutes');
+const paymentRoutes=require('./routes/paymentRoutes')
 
 app.use('/api', authRoutes);
 app.use('/products', productRoutes);
 app.use('/orders', orderRoutes);
+app.use('/payments', paymentRoutes);
 
 const PORT = 8080;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

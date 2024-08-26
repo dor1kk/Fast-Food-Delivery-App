@@ -9,8 +9,8 @@ Content-Type: application/json
 
 ###
 
-GET http://localhost:8080/api/protected
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzI0NjY0MDg0LCJleHAiOjE3MjQ2Njc2ODR9.9wnhIVIIqzRI8CBu4tXnc2KCEtzM4J11wP_7MChne18
+GET http://localhost:8080/payments/payment-history
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiaWF0IjoxNzI0Njk2NTUzLCJleHAiOjE3MjQ3MDAxNTN9.saClkiF8pUzj9UK9tvSnEyM4Gzduoj11I8i3nAnXzck
 
 ###
 

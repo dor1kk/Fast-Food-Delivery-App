@@ -28,12 +28,12 @@ const Login = () => {
         },
         body: JSON.stringify(formData),
       });
-
+  
       if (response.ok) {
         const data = await response.json();
         const { token, user } = data; // Extract token and user from response
         console.log('API Response:', data); // Debug log
-
+  
         setAuthToken(token);  
         setUser(user);  
         console.log('Login successful:', user); // Debug log
@@ -45,6 +45,8 @@ const Login = () => {
       console.error('Error during login:', error);
     }
   };
+  
+  
 
   return (
     <div className="modal">

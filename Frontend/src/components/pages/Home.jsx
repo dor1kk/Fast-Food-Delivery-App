@@ -1,20 +1,52 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { useLocation } from 'react-router-dom';
+import PerfectScrollbar from 'react-perfect-scrollbar';
+import 'react-perfect-scrollbar/dist/css/styles.css'; // Import the library styles
 import Orders from '../forms/OrderForm';
 import Products from './Products';
 import MyOrders from './MyOrders';
 import HomePage from './HomePage';
+import Payments from '../forms/PaymentForm';
+import Wishlist from './Wishlist';
+import PaymentHistory from './PaymentHistory';
+import { AuthContext } from '../../context/authContext'; // Import AuthContext
+import Dashboard from '../Dashboard';
 
 const Home = () => {
+  const { user } = useContext(AuthContext); // Access user from AuthContext
   const location = useLocation();
-  const email = location.state?.email; 
+  const email = location.state?.email;
 
+  // Log the user role to console
+  console.log('User role:', user?.role);
+
+  // Define role-based content rendering
   const renderContent = () => {
-    switch (location.pathname) {
-      case '/home/my-orders':
-        return <MyOrders />;
-      case '/home/products':
-        return <Products />;
+    if (!user) {
+      return <HomePage />; // Default to HomePage if no user info is available
+    }
+
+    switch (user.role) {
+      case 'customer':
+        switch (location.pathname) {
+          case '/home/my-orders':
+            return <MyOrders />;
+          case '/home/products':
+            return <Products />;
+          case '/home/payments-history':
+            return <PaymentHistory />;
+          case '/home/wishlist':
+            return <Wishlist />;
+          default:
+            return <HomePage />;
+        }
+      case 'driver':
+        switch (location.pathname) {
+          case '/home/driver-dashboard':
+            return <Dashboard />;
+          default:
+            return <HomePage />;
+        }
       default:
         return <HomePage />;
     }
@@ -24,10 +56,11 @@ const Home = () => {
     <div className="h-[90vh] flex flex-col items-center justify-start bg-white relative">
       <div className="absolute top-0 left-0 w-full h-[200px] bg-red-600"></div>
 
-      <div className="relative mt-8 bg-white shadow-lg rounded-lg w-4/5 h-[700px] overflow-auto custom-scrollbar overflow-y-scroll z-10">
-        {renderContent()}
+      <div className="relative mt-8 bg-white shadow-lg rounded-lg w-4/5 h-[700px] overflow-hidden z-10">
+        <PerfectScrollbar>
+          {renderContent()}
+        </PerfectScrollbar>
       </div>
-
     </div>
   );
 };

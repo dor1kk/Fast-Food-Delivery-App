@@ -5,6 +5,7 @@ const HomePage = () => {
   return (
     <div className="bg-gray-100 min-h-screen">
       <Navbar />
+      
       <section className="relative bg-red-600 text-white">
         <div className="absolute inset-0">
           <img 

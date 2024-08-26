@@ -16,20 +16,35 @@ const Navbar = () => {
     setDropdownOpen(!dropdownOpen);
   };
 
+  const renderCustomerLinks = () => (
+    <>
+      <Link to="/home" className="text-white px-4 py-2">Home</Link>
+      <Link to="/home/my-orders" className="text-white px-4 py-2">My Orders</Link>
+      <Link to="/home/products" className="text-white px-4 py-2">Products</Link>
+      <Link to="/home/payments-history" className="text-white px-4 py-2">Payments</Link>
+      <Link to="/home/wishlist" className="text-white px-4 py-2">Wishlist</Link>
+    </>
+  );
+
+  const renderDriverLinks = () => (
+    <>
+      <Link to="/home/driver-dashboard" className="text-white px-4 py-2">Dashboard</Link>
+      {/* Add more driver-specific links here if needed */}
+    </>
+  );
+
   return (
-    <header className="w-full bg-red-600 p-4 flex justify-between items-center relative">
+    <header className="fixed w-full bg-red-600 p-4 flex justify-between items-center relative">
       <h1 className="text-white text-lg font-bold">Delivery</h1>
       <div className="flex items-center">
-        <Link to="/home" className="text-white px-4 py-2">Home</Link>
-        <Link to="my-orders" className="text-white px-4 py-2">Orders</Link>
-        <Link to="products" className="text-white px-4 py-2">Products</Link>
-        <Link to="payments" className="text-white px-4 py-2">Payments</Link>
-        <Link to="payments" className="text-white px-4 py-2">Wishlist</Link>
-
-
-      </div>
-      <div className="relative">
         {user ? (
+          user.role === 'customer' ? renderCustomerLinks() : renderDriverLinks()
+        ) : (
+          <Link to="/login" className="text-white px-4 py-2">Login</Link>
+        )}
+      </div>
+      {user && (
+        <div className="relative">
           <div className="flex items-center">
             <p className="text-white px-4 py-2">{user.email}</p>
             <div className="relative">
@@ -47,10 +62,8 @@ const Navbar = () => {
               </div>
             </div>
           </div>
-        ) : (
-          <Link to="/login" className="text-white px-4 py-2">Login</Link>
-        )}
-      </div>
+        </div>
+      )}
     </header>
   );
 };

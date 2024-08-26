@@ -8,16 +8,28 @@ const router = express.Router();
 const JWT_SECRET = 'mysecretkey';
 
 router.post('/register', (req, res) => {
-  const { email, password } = req.body;
-  bcrypt.hash(password, 10, (err, hash) => {
-    if (err) return res.status(500).json({ message: 'Error hashing password' });
-
-    db.query('INSERT INTO users (email, password) VALUES (?, ?)', [email, hash], (err) => {
-      if (err) return res.status(500).json({ message: 'Error registering user' });
-      res.status(201).json({ message: 'User registered' });
+    const { email, password, username } = req.body;
+    
+    if (!email || !password || !username) {
+      return res.status(400).json({ message: 'Email, password, and username are required' });
+    }
+  
+    bcrypt.hash(password, 10, (err, hash) => {
+      if (err) {
+        console.error('Error hashing password:', err);
+        return res.status(500).json({ message: 'Error hashing password' });
+      }
+  
+      db.query('INSERT INTO users (email, password, username) VALUES (?, ?, ?)', [email, hash, username], (err) => {
+        if (err) {
+          console.error('Error registering user:', err);
+          return res.status(500).json({ message: 'Error registering user' });
+        }
+        res.status(201).json({ message: 'User registered' });
+      });
     });
   });
-});
+  
 
 router.post('/login', (req, res) => {
     const { email, password } = req.body;
