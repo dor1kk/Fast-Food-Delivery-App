@@ -6,18 +6,36 @@ const router = express.Router();
 
 router.post('/payment', (req, res) => {
     const { orderId, paymentMethod, amount, status } = req.body;
-    console.log('Received payment data:', { orderId, paymentMethod, amount, status }); // Add this line
+    console.log('Received payment data:', { orderId, paymentMethod, amount, status }); 
     
-    const query = `INSERT INTO payments (order_id, payment_method, amount, status) VALUES (?, ?, ?, ?)`;
-    db.query(query, [orderId, paymentMethod, amount, status], (err, result) => {
+    const paymentQuery = `INSERT INTO payments (order_id, payment_method, amount, status) VALUES (?, ?, ?, ?)`;
+  
+    db.query(paymentQuery, [orderId, paymentMethod, amount, status], (err, paymentResult) => {
       if (err) {
         console.error('Error saving payment:', err);
-        res.status(500).send('Error saving payment');
-      } else {
-        res.status(200).send('Payment saved successfully');
-      }
+        return res.status(500).send('Error saving payment');
+      } 
+  
+      const driverId = 1;
+      const deliveryStatus = 'Assigned';  
+      const assignedTime = new Date();   
+  
+      const deliveryQuery = `
+        INSERT INTO deliveries (order_id, driver_id, status, assigned_time) 
+        VALUES (?, ?, ?, ?)
+      `;
+      
+      db.query(deliveryQuery, [orderId, driverId, deliveryStatus, assignedTime], (err, deliveryResult) => {
+        if (err) {
+          console.error('Error saving delivery:', err);
+          return res.status(500).send('Error saving delivery');
+        }
+  
+        res.status(200).send('Payment and delivery saved successfully');
+      });
     });
   });
+  
 
 
   router.get('/payment-history', authenticateToken, (req, res) => {

@@ -2,15 +2,17 @@ import React, { useContext } from 'react';
 import { useLocation } from 'react-router-dom';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import 'react-perfect-scrollbar/dist/css/styles.css'; // Import the library styles
-import Orders from '../forms/OrderForm';
-import Products from './Products';
-import MyOrders from './MyOrders';
-import HomePage from './HomePage';
-import Payments from '../forms/PaymentForm';
-import Wishlist from './Wishlist';
-import PaymentHistory from './PaymentHistory';
-import { AuthContext } from '../../context/authContext'; // Import AuthContext
-import Dashboard from '../Dashboard';
+import Orders from './forms/OrderForm';
+import Products from './Customer-Pages/Products';
+import MyOrders from './Customer-Pages/MyOrders';
+import HomePage from './Customer-Pages/HomePage';
+import Payments from './forms/PaymentForm';
+import Wishlist from './Customer-Pages/Wishlist';
+import PaymentHistory from './Customer-Pages/PaymentHistory';
+import { AuthContext } from '../context/authContext'; // Import AuthContext
+import Dashboard from './Driver-Pages/DriverDashboard';
+import ActiveDeliveries from './Driver-Pages/ActiveDeliveries';
+import CompletedDeliveries from './Driver-Pages/CompletedDeliveries';
 
 const Home = () => {
   const { user } = useContext(AuthContext); // Access user from AuthContext
@@ -42,8 +44,13 @@ const Home = () => {
         }
       case 'driver':
         switch (location.pathname) {
+         
           case '/home/driver-dashboard':
             return <Dashboard />;
+            case '/home/active-deliveries':
+              return <ActiveDeliveries />;
+              case '/home/completed-deliveries':
+                return <CompletedDeliveries />;
           default:
             return <HomePage />;
         }

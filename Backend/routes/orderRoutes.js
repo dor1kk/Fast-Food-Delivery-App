@@ -5,7 +5,7 @@ const authenticateToken = require('../config/auth');
 const router = express.Router();
 
 router.post('/', authenticateToken, async (req, res) => {
-  const { customer_name, delivery_address, total_price, status, delivery_time, special_instructions, delivery_fee, items } = req.body;
+  const { customer_name, delivery_address, total_price, status, special_instructions, delivery_fee, items } = req.body;
 
   if (!items || !Array.isArray(items) || items.length === 0) {
     return res.status(400).send('Order items are required');

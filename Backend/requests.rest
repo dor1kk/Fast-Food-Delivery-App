@@ -18,3 +18,11 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiaWF0IjoxN
 GET http://localhost:8080/orders/customer-orders
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiaWF0IjoxNzI0NjcxNTY5LCJleHAiOjE3MjQ2NzUxNjl9.zA9MTloX5ri0toIpvf4S2LaSXgmEnsEG5fHX6wYRcpM
 
+###
+
+GET http://localhost:8080/deliveries/active-deliveries
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzI0NzA4MDM2LCJleHAiOjE3MjQ3MTE2MzZ9.EH6j4DA6rlPeEEgen3fnGA-ArulxTvshUif5P0FnzAM
+
+
+
+

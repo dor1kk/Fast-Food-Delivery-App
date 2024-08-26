@@ -29,7 +29,9 @@ const Navbar = () => {
   const renderDriverLinks = () => (
     <>
       <Link to="/home/driver-dashboard" className="text-white px-4 py-2">Dashboard</Link>
-      {/* Add more driver-specific links here if needed */}
+      <Link to="/home/active-deliveries" className="text-white px-4 py-2">Active Deliveries</Link>
+      <Link to="/home/completed-deliveries" className="text-white px-4 py-2">Completed Deliveries</Link>
+
     </>
   );
 
