@@ -10,6 +10,10 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@ant-design/pro-card": "^2.8.7",
+    "@ant-design/pro-form": "^2.29.0",
+    "@ant-design/pro-layout": "^7.19.12",
+    "@ant-design/pro-table": "^3.16.6",
     "@stripe/react-stripe-js": "^2.8.0",
     "@stripe/stripe-js": "^4.3.0",
     "axios": "^1.7.4",

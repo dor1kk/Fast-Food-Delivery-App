@@ -27,7 +27,6 @@ ChartJS.register(
 );
 
 const DriverDashboard = () => {
-  // Data for Line Chart
   const lineChartData = {
     labels: ['January', 'February', 'March', 'April', 'May', 'June'],
     datasets: [
@@ -41,7 +40,6 @@ const DriverDashboard = () => {
     ],
   };
 
-  // Data for Bar Chart
   const barChartData = {
     labels: ['North', 'South', 'East', 'West'],
     datasets: [

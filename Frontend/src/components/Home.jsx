@@ -61,7 +61,7 @@ const Home = () => {
 
   return (
     <div className="h-[90vh] flex flex-col items-center justify-start bg-white relative">
-      <div className="absolute top-0 left-0 w-full h-[200px] bg-red-600"></div>
+      <div className="absolute top-0 left-0 w-full h-[200px] bg-red-500"></div>
 
       <div className="relative mt-8 bg-white shadow-lg rounded-lg w-4/5 h-[700px] overflow-hidden z-10">
         <PerfectScrollbar>
