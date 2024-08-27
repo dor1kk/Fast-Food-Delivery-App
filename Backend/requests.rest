@@ -10,7 +10,7 @@ Content-Type: application/json
 ###
 
 GET http://localhost:8080/payments/payment-history
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiaWF0IjoxNzI0Njk2NTUzLCJleHAiOjE3MjQ3MDAxNTN9.saClkiF8pUzj9UK9tvSnEyM4Gzduoj11I8i3nAnXzck
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiaWF0IjoxNzI0NzY2MDQwLCJleHAiOjE3MjQ3Njk2NDB9.LEwsap-iySHdQbLnOZDXY6kCoKkChHj_F99QEeVHpc0
 
 ###
 

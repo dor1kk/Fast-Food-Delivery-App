@@ -18,26 +18,26 @@ const Navbar = () => {
 
   const renderCustomerLinks = () => (
     <>
-      <Link to="/home" className="text-gray-500 px-4 py-2">Home</Link>
-      <Link to="/home/my-orders" className="text-gray-500 px-4 py-2">My Orders</Link>
-      <Link to="/home/products" className="text-gray-500 px-4 py-2">Products</Link>
-      <Link to="/home/payments-history" className="text-gray-500 px-4 py-2">Payments</Link>
-      <Link to="/home/wishlist" className="text-gray-500 px-4 py-2">Wishlist</Link>
+      <Link to="/home" className="text-white px-4 py-2">Home</Link>
+      <Link to="/home/my-orders" className="text-white px-4 py-2">My Orders</Link>
+      <Link to="/home/products" className="text-white px-4 py-2">Products</Link>
+      <Link to="/home/payments-history" className="text-white px-4 py-2">Payments</Link>
+      <Link to="/home/wishlist" className="text-white px-4 py-2">Wishlist</Link>
     </>
   );
 
   const renderDriverLinks = () => (
     <>
-      <Link to="/home/driver-dashboard" className="text-gray-500 px-4 py-2">Dashboard</Link>
-      <Link to="/home/active-deliveries" className="text-gray-500 px-4 py-2">Active Deliveries</Link>
-      <Link to="/home/completed-deliveries" className="text-gray-500 px-4 py-2">Completed Deliveries</Link>
+      <Link to="/home/driver-dashboard" className="text-white px-4 py-2">Dashboard</Link>
+      <Link to="/home/active-deliveries" className="text-white px-4 py-2">Active Deliveries</Link>
+      <Link to="/home/completed-deliveries" className="text-white px-4 py-2">Completed Deliveries</Link>
 
     </>
   );
 
   return (
-    <header className="fixed w-full bg-gray-200 p-4 flex justify-between items-center relative">
-      <h1 className="text-gray-500 text-lg font-bold">Delivery</h1>
+    <header className="fixed w-full bg-red-600 p-4 flex justify-between items-center relative">
+      <h1 className="text-white text-lg font-bold">Delivery</h1>
       <div className="flex items-center">
         {user ? (
           user.role === 'customer' ? renderCustomerLinks() : renderDriverLinks()
@@ -59,7 +59,7 @@ const Navbar = () => {
               <div 
                 className={`absolute right-0 mt-2 bg-white text-black w-[220px] rounded shadow-lg ${dropdownOpen ? 'block' : 'hidden'}`}
               >
-                <Link to="/profile" className="block px-4 py-2 hover:bg-gray-200">Profile Settings</Link>
+                <Link to="/home/profile" className="block px-4 py-2 hover:bg-gray-200">Profile Settings</Link>
                 <button onClick={handleLogout} className="block px-4 py-2 hover:bg-gray-200">Logout</button>
               </div>
             </div>

@@ -13,6 +13,7 @@ import ActiveDeliveries from './components/Driver-Pages/ActiveDeliveries';
 import CompletedDeliveries from './components/Driver-Pages/CompletedDeliveries';
 import Dashboard from './components/Admin/Dashboard';
 import AdminHome from './components/Admin';
+import Profile from './components/Customer-Pages/Profile';
 
 function App() {
 
@@ -33,6 +34,8 @@ function App() {
                   <Route path='driver-dashboard' element={<DriverDashboard />}></Route>
                   <Route path='active-deliveries' element={<ActiveDeliveries />}></Route>
                   <Route path='completed-deliveries' element={<CompletedDeliveries />}></Route>
+                  <Route path='profile' element={<Profile />}></Route>
+
                   
           </Route>
          

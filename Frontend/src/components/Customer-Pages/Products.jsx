@@ -4,8 +4,11 @@ import Orders from '../forms/OrderForm';
 
 const Products = () => {
   const [products, setProducts] = useState([]);
+  const [filteredProducts, setFilteredProducts] = useState([]);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('all');
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -14,6 +17,7 @@ const Products = () => {
         if (response.ok) {
           const data = await response.json();
           setProducts(data);
+          setFilteredProducts(data);
         } else {
           console.error('Failed to fetch products:', await response.text());
         }
@@ -24,6 +28,24 @@ const Products = () => {
 
     fetchProducts();
   }, []);
+
+  useEffect(() => {
+    let filtered = products;
+
+    if (searchQuery) {
+      filtered = filtered.filter(product =>
+        product.name.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+    }
+
+    if (selectedCategory !== 'all') {
+      filtered = filtered.filter(product =>
+        product.category.toLowerCase() === selectedCategory.toLowerCase()
+      );
+    }
+
+    setFilteredProducts(filtered);
+  }, [searchQuery, selectedCategory, products]);
 
   const openModal = (product) => {
     setSelectedProduct(product);
@@ -39,12 +61,34 @@ const Products = () => {
     <div className="min-h-screen bg-gray-100">
       <Navbar />
       <main className="container mx-auto mt-6 p-6">
-        <div className="flex items-center space-x-4 mb-6">
-          <button className="font-semibold border-b-2 border-red-500 text-red-500">Popular</button>
-          <button className="font-semibold text-gray-700">Recent</button>
+        <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center space-x-4">
+            <button className="font-semibold border-b-2 border-red-500 text-red-500">Popular</button>
+            <button className="font-semibold text-gray-700">Recent</button>
+          </div>
+          <div className="flex items-center space-x-4">
+            <input
+              type="text"
+              placeholder="Search..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="p-2 border border-gray-300 rounded-lg"
+            />
+            <select
+              value={selectedCategory}
+              onChange={(e) => setSelectedCategory(e.target.value)}
+              className="p-2 border border-gray-300 rounded-lg"
+            >
+              <option value="all">All Categories</option>
+              {/* Add more category options here */}
+              <option value="electronics">Electronics</option>
+              <option value="clothing">Clothing</option>
+              <option value="home">Home</option>
+            </select>
+          </div>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {products.map(product => (
+          {filteredProducts.map(product => (
             <div key={product.id} className="bg-white shadow rounded-lg p-4">
               <div className="flex justify-center mb-4 bg-gray-100 rounded-lg p-4">
                 <img src={product.image_url} alt={product.name} className="w-32 h-32 object-contain" />

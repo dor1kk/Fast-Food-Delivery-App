@@ -13,6 +13,7 @@ import { AuthContext } from '../context/authContext'; // Import AuthContext
 import Dashboard from './Driver-Pages/DriverDashboard';
 import ActiveDeliveries from './Driver-Pages/ActiveDeliveries';
 import CompletedDeliveries from './Driver-Pages/CompletedDeliveries';
+import Profile from './Customer-Pages/Profile';
 
 const Home = () => {
   const { user } = useContext(AuthContext); // Access user from AuthContext
@@ -39,6 +40,8 @@ const Home = () => {
             return <PaymentHistory />;
           case '/home/wishlist':
             return <Wishlist />;
+            case '/home/profile':
+              return <Profile />;
           default:
             return <HomePage />;
         }
