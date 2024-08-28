@@ -2,34 +2,23 @@ import React, { useContext, useEffect, useState } from 'react';
 import axios from 'axios';
 import { AuthContext } from '../../context/authContext';
 import Navbar from '../layout/navbar';
-import { FaEdit, FaTrash, FaCreditCard, FaSearch } from 'react-icons/fa'; // Import icons from react-icons
+import { FaEdit, FaTrash, FaCreditCard, FaSearch } from 'react-icons/fa'; 
 import Payments from '../forms/PaymentForm';
+import { fetchOrders, makePayment } from '../../api/OrdersApi';
 
 const MyOrders = () => {
   const [orders, setOrders] = useState([]);
-  const [selectedOrders, setSelectedOrders] = useState([]); // State to hold selected orders
-  const [selectedOrder, setSelectedOrder] = useState(null); // State to hold the selected order for payment
-  const [searchQuery, setSearchQuery] = useState(""); // State to hold the search query
+  const [selectedOrders, setSelectedOrders] = useState([]); 
+  const [selectedOrder, setSelectedOrder] = useState(null); 
+  const [searchQuery, setSearchQuery] = useState(""); 
   const { authToken } = useContext(AuthContext);
 
   useEffect(() => {
-    axios.get('http://localhost:8080/orders/customer-orders', {
-      headers: { Authorization: `Bearer ${authToken}` }
-    })
-    .then(response => {
-      if (Array.isArray(response.data)) {
-        setOrders(response.data);
-      } else {
-        console.error('Expected an array of orders, but got:', response.data);
-      }
-    })
-    .catch(error => {
-      console.error('Error fetching orders:', error);
-      if (error.response) {
-        console.error('Response error:', error.response.data);
-      }
-    });
+    fetchOrders(authToken)
+      .then(setOrders)
+      .catch(error => console.error('Failed to fetch orders:', error));
   }, [authToken]);
+  
 
   const handleSelectOrder = (orderId) => {
     setSelectedOrders(prevSelectedOrders => 
@@ -42,22 +31,26 @@ const MyOrders = () => {
   const handleMakePayment = () => {
     const ordersToPay = orders.filter(order => selectedOrders.includes(order.id));
     if (ordersToPay.length > 0) {
-      setSelectedOrder(ordersToPay[0]); // Set the first selected order for payment
+      setSelectedOrder(ordersToPay[0]); 
+      makePayment(ordersToPay[0].id, authToken)
+        .then(response => console.log('Payment successful:', response))
+        .catch(error => console.error('Payment failed:', error));
     }
   };
+  
 
   const handleCloseModal = () => {
-    setSelectedOrder(null); // Close the modal
+    setSelectedOrder(null); 
   };
 
   const handleEdit = () => {
     console.log('Edit orders with IDs:', selectedOrders);
-    // Add your edit logic here
+    //TODO edit logic
   };
 
   const handleDelete = () => {
     console.log('Delete orders with IDs:', selectedOrders);
-    // Add your delete logic here
+    //TODO delete logic
   };
 
   const filteredOrders = orders.filter(order => 

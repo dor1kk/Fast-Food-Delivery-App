@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { AuthContext } from '../../context/authContext';
+import { submitOrder } from '../../api/OrdersApi';
 
 const OrderForm = ({ product, onClose }) => {
   const { authToken, user } = useContext(AuthContext); 
@@ -37,34 +38,13 @@ const OrderForm = ({ product, onClose }) => {
   const handleOrderSubmit = async () => {
     try {
       console.log('Order Details:', orderDetails);
-      console.log('Token:', authToken); // Log token to ensure it's being sent
+      console.log('Token:', authToken); 
 
-      const response = await fetch('http://localhost:8080/orders', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${authToken}`, // Use authToken from context
-        },
-        body: JSON.stringify({
-          ...orderDetails,
-          items: [{
-            product_id: orderDetails.product_id,
-            quantity: orderDetails.quantity,
-            price: product.price,
-            total_price: orderDetails.total_price,
-          }],
-        }),
-      });
+      await submitOrder(orderDetails, authToken);
 
-      if (response.ok) {
-        alert('Order submitted successfully!');
-        onClose();
-      } else {
-        console.error('Error submitting order:', await response.text());
-        alert('Error submitting order. Please try again.');
-      }
+      alert('Order submitted successfully!');
+      onClose();
     } catch (error) {
-      console.error('Error submitting order:', error);
       alert('Error submitting order. Please try again.');
     }
   };

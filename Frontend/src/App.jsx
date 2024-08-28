@@ -2,8 +2,6 @@ import React, { useContext } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { AuthProvider } from './context/authContext';
 import Home from './components/Home';
-import Login from './components/auth/Login';
-import Register from './components/auth/Register';
 import Products from './components/Customer-Pages/Products';
 import MyOrders from './components/Customer-Pages/MyOrders';
 import Payments from './components/forms/PaymentForm';
@@ -14,6 +12,8 @@ import CompletedDeliveries from './components/Driver-Pages/CompletedDeliveries';
 import Dashboard from './components/Admin/Dashboard';
 import AdminHome from './components/Admin';
 import Profile from './components/Customer-Pages/Profile';
+import Login from './components/auth/login';
+import Register from './components/auth/register';
 
 function App() {
 
@@ -38,6 +38,8 @@ function App() {
 
                   
           </Route>
+
+          <Route path='/' element={<Home />}></Route>
          
           <Route path="/admin" element={<AdminHome />} >
                   <Route path="dashboard" element={<Dashboard />} /> 
