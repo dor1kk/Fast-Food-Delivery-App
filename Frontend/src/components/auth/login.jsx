@@ -31,12 +31,12 @@ const Login = () => {
   
       if (response.ok) {
         const data = await response.json();
-        const { token, user } = data; // Extract token and user from response
-        console.log('API Response:', data); // Debug log
+        const { token, user } = data; 
+        console.log('API Response:', data); 
   
         setAuthToken(token);  
         setUser(user);  
-        console.log('Login successful:', user); // Debug log
+        console.log('Login successful:', user); 
         navigate('/home');
       } else {
         alert('Login failed: ' + await response.text());

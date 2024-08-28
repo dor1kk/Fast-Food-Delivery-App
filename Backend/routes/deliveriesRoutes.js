@@ -2,7 +2,6 @@
 const express = require('express');
 const db = require('../config/db');
 const authenticateToken = require('../config/auth');
-
 const router = express.Router();
 
 router.get('/active-deliveries', authenticateToken, (req, res) => {
