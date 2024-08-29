@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { AuthProvider } from './context/authContext';
 import Home from './components/Home';
@@ -14,39 +14,35 @@ import AdminHome from './components/Admin';
 import Profile from './components/Customer-Pages/Profile';
 import Login from './components/auth/login';
 import Register from './components/auth/register';
+import ProtectedRoute from './components/layout/protectedRoute';
 
 function App() {
-
-
-
-
   return (
     <AuthProvider>
-      <Router>
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/home" element={<Home />} >
-                  <Route path="my-orders" element={<MyOrders />} />
-                  <Route path="products" element={<Products />} />
-                  <Route path='payments' element={<Payments />}></Route>
-                  <Route path='payments-history' element={<PaymentHistory />}></Route>
-                  <Route path='driver-dashboard' element={<DriverDashboard />}></Route>
-                  <Route path='active-deliveries' element={<ActiveDeliveries />}></Route>
-                  <Route path='completed-deliveries' element={<CompletedDeliveries />}></Route>
-                  <Route path='profile' element={<Profile />}></Route>
 
-                  
+          {/* Protect routes that require authentication */}
+          <Route path="/home" element={<ProtectedRoute element={<Home />} />} >
+            <Route path="my-orders" element={<ProtectedRoute element={<MyOrders />} />} />
+            <Route path="products" element={<ProtectedRoute element={<Products />} />} />
+            <Route path="payments" element={<ProtectedRoute element={<Payments />} />} />
+            <Route path="payments-history" element={<ProtectedRoute element={<PaymentHistory />} />} />
+            <Route path="driver-dashboard" element={<ProtectedRoute element={<DriverDashboard />} />} />
+            <Route path="active-deliveries" element={<ProtectedRoute element={<ActiveDeliveries />} />} />
+            <Route path="completed-deliveries" element={<ProtectedRoute element={<CompletedDeliveries />} />} />
+            <Route path="profile" element={<ProtectedRoute element={<Profile />} />} />
           </Route>
 
-          <Route path='/' element={<Home />}></Route>
-         
-          <Route path="/admin" element={<AdminHome />} >
-                  <Route path="dashboard" element={<Dashboard />} /> 
+          {/* Protect admin routes */}
+          <Route path="/admin" element={<ProtectedRoute element={<AdminHome />} />} >
+            <Route path="dashboard" element={<ProtectedRoute element={<Dashboard />} />} />
           </Route>
 
+          {/* Default home route */}
+          <Route path="/" element={<Home />} />
         </Routes>
-      </Router>
     </AuthProvider>
   );
 }

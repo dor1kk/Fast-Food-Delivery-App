@@ -6,10 +6,9 @@ const Navbar = () => {
   const { user, logout } = useContext(AuthContext);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const location = useLocation();
-  const email = location.state?.email;
 
   const handleLogout = () => {
-    logout();
+    logout(); 
   };
 
   const toggleDropdown = () => {
@@ -31,7 +30,6 @@ const Navbar = () => {
       <Link to="/home/driver-dashboard" className="text-white px-4 py-2">Dashboard</Link>
       <Link to="/home/active-deliveries" className="text-white px-4 py-2">Active Deliveries</Link>
       <Link to="/home/completed-deliveries" className="text-white px-4 py-2">Completed Deliveries</Link>
-
     </>
   );
 
