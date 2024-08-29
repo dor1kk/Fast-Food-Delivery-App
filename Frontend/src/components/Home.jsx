@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import 'react-perfect-scrollbar/dist/css/styles.css'; // Import the library styles
@@ -19,6 +19,16 @@ const Home = () => {
   const { user } = useContext(AuthContext); // Access user from AuthContext
   const location = useLocation();
   const email = location.state?.email;
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 640);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 640);
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   // Log the user role to console
   console.log('User role:', user?.role);
@@ -40,20 +50,19 @@ const Home = () => {
             return <PaymentHistory />;
           case '/home/wishlist':
             return <Wishlist />;
-            case '/home/profile':
-              return <Profile />;
+          case '/home/profile':
+            return <Profile />;
           default:
             return <HomePage />;
         }
       case 'driver':
         switch (location.pathname) {
-         
           case '/home/driver-dashboard':
             return <Dashboard />;
-            case '/home/active-deliveries':
-              return <ActiveDeliveries />;
-              case '/home/completed-deliveries':
-                return <CompletedDeliveries />;
+          case '/home/active-deliveries':
+            return <ActiveDeliveries />;
+          case '/home/completed-deliveries':
+            return <CompletedDeliveries />;
           default:
             return <HomePage />;
         }
@@ -62,15 +71,23 @@ const Home = () => {
     }
   };
 
+  const content = renderContent();
+
   return (
     <div className="min-h-screen flex flex-col bg-white">
       <div className="hidden sm:block w-full h-[150px] bg-red-500"></div>
 
-      <div className="flex-grow px-4 sm:px-6 md:px-8 py-6 sm:-mt-24 md:-mt-32">
+      <div className="flex-grow  sm:px-6 md:px-8 p-4 sm:-mt-24 md:-mt-32">
         <div className="bg-white shadow-lg rounded-lg overflow-hidden">
-          <PerfectScrollbar className="max-h-[calc(100vh-20px)] sm:max-h-[calc(100vh-120px)]">
-            {renderContent()}
-          </PerfectScrollbar>
+          {isMobile ? (
+            <div className="max-h-[calc(100vh-20px)] overflow-y-auto">
+              {content}
+            </div>
+          ) : (
+            <PerfectScrollbar className="max-h-[calc(100vh-120px)]">
+              {content}
+            </PerfectScrollbar>
+          )}
         </div>
       </div>
     </div>
