@@ -40,15 +40,26 @@ router.post('/payment', (req, res) => {
 
   router.get('/payment-history', authenticateToken, (req, res) => {
     const customerId = req.user.id;
+    
+    console.log("User ID:", customerId);
   
-    db.query('SELECT p.* FROM payments p inner join orders o on o.id=p.order_id inner join users u on o.customer_id=u.id  WHERE customer_id = ?', [customerId], (err, results) => {
+    const query = `
+      SELECT p.*
+      FROM payments p
+      INNER JOIN orders o ON p.order_id = o.id
+      WHERE o.customer_id = ?
+    `;
+  
+    db.query(query, [customerId], (err, results) => {
       if (err) {
         console.error('Error fetching payments:', err.message);
         return res.status(500).json({ message: 'Server error' });
       }
       res.json(results);
+      console.log("Results:", results);
     });
   });
+  
 
 
 

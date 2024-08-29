@@ -3,17 +3,19 @@ import React, { useState, useEffect } from 'react';
 const PaymentForm = ({ order, onClose }) => {
   const [formData, setFormData] = useState({
     orderId: '',
-    paymentMethod: 'credit-card',
+    paymentMethod: 'Credit Card', // Use the database value
     amount: '',
     status: 'Pending',
   });
 
+  console.log("order", order);
+
   useEffect(() => {
     if (order) {
-      const { id, total_price } = order;
+      const { order_id, total_price } = order;
       setFormData({
         ...formData,
-        orderId: id,
+        orderId: order_id,
         amount: total_price,
       });
     }
@@ -28,9 +30,16 @@ const PaymentForm = ({ order, onClose }) => {
   };
 
   const handleMethodClick = (methodId) => {
+    // Map methodId to database value
+    const methodMapping = {
+      'credit-card': 'Credit Card',
+      'debit-card': 'Debit Card',
+      'paypal': 'PayPal',
+      'cash': 'Cash'
+    };
     setFormData({
       ...formData,
-      paymentMethod: methodId,
+      paymentMethod: methodMapping[methodId] || 'Credit Card', // Default to 'Credit Card'
     });
   };
 
@@ -47,7 +56,7 @@ const PaymentForm = ({ order, onClose }) => {
 
       if (response.ok) {
         alert('Payment saved successfully!');
-        onClose(); // Close the modal on successful payment
+        onClose(); 
       } else {
         alert('Failed to save payment. Please try again.');
       }
@@ -63,7 +72,7 @@ const PaymentForm = ({ order, onClose }) => {
         <form onSubmit={handleSubmit} className="flex flex-col gap-6 md:flex-row md:gap-8">
           <div className="flex-1 space-y-6">
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-1">Order ID:</label>
+              <label className="block text-sm font-semibold text-gray-700 mb-1">Product ID:</label>
               <input
                 type="text"
                 name="orderId"
@@ -103,39 +112,39 @@ const PaymentForm = ({ order, onClose }) => {
             </div>
           </div>
        
-           <div className='flex flex-col'>
-          <div className="flex-1 space-y-6">
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-1">Payment Method:</label>
-              <div className="flex flex-wrap gap-4">
-                {paymentMethods.map((method) => (
-                  <div
-                    key={method.id}
-                    className={`flex flex-row justify-center items-center space-x-2 p-2 bg-gray-50 border rounded-lg cursor-pointer ${formData.paymentMethod === method.id ? 'border-blue-500' : 'border-gray-300'} hover:border-blue-500`}
-                    onClick={() => handleMethodClick(method.id)}
-                  >
-                    <img src={method.image} alt={method.label} className="h-6 w-6" />
-                    <p className="text-sm font-medium">{method.label}</p>
-                  </div>
-                ))}
+          <div className='flex flex-col'>
+            <div className="flex-1 space-y-6">
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-1">Payment Method:</label>
+                <div className="flex flex-wrap gap-4">
+                  {paymentMethods.map((method) => (
+                    <div
+                      key={method.id}
+                      className={`flex flex-row justify-center items-center space-x-2 p-2 bg-gray-50 border rounded-lg cursor-pointer ${formData.paymentMethod === method.label ? 'border-blue-500' : 'border-gray-300'} hover:border-blue-500`}
+                      onClick={() => handleMethodClick(method.id)}
+                    >
+                      <img src={method.image} alt={method.label} className="h-6 w-6" />
+                      <p className="text-sm font-medium">{method.label}</p>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
-          </div>
-          <div className="flex justify-end mt-6 space-x-4">
-            <button
-              type="submit"
-              className="px-4 py-2 bg-red-600 text-white text-sm rounded-md hover:bg-red-700"
-            >
-              Submit Payment
-            </button>
-            <button
-              type="button"
-              onClick={onClose}
-              className="px-4 py-2 bg-gray-300 text-white text-sm rounded-md hover:bg-gray-400"
-            >
-              Cancel
-            </button>
-          </div>
+            <div className="flex justify-end mt-6 space-x-4">
+              <button
+                type="submit"
+                className="px-4 py-2 bg-red-600 text-white text-sm rounded-md hover:bg-red-700"
+              >
+                Submit Payment
+              </button>
+              <button
+                type="button"
+                onClick={onClose}
+                className="px-4 py-2 bg-gray-300 text-white text-sm rounded-md hover:bg-gray-400"
+              >
+                Cancel
+              </button>
+            </div>
           </div>
         </form>
       </div>
