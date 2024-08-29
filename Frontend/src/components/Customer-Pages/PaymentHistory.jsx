@@ -2,15 +2,18 @@ import React, { useContext, useEffect, useState } from 'react';
 import axios from 'axios';
 import { AuthContext } from '../../context/authContext';
 import Navbar from '../layout/navbar';
-import { FaCreditCard, FaSearch } from 'react-icons/fa'; // Import icons from react-icons
+import { FaCreditCard, FaSearch, FaFilter, FaChevronDown, FaEye } from 'react-icons/fa';
 
 const PaymentHistory = () => {
   const [payments, setPayments] = useState([]);
-  const [selectedPayments, setSelectedPayments] = useState([]); // State to hold selected payments
-  const [searchQuery, setSearchQuery] = useState(""); // State to hold the search query
+  const [selectedPayments, setSelectedPayments] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const { authToken } = useContext(AuthContext);
+  const [filterOpen, setFilterOpen] = useState(false);
+  const [statusFilter, setStatusFilter] = useState('all');
+  const [dateSort, setDateSort] = useState('desc');
 
   useEffect(() => {
     axios.get('http://localhost:8080/payments/payment-history', {
@@ -47,10 +50,17 @@ const PaymentHistory = () => {
     return method ? method.image : '';
   };
 
-  const filteredPayments = payments.filter(payment =>
-    String(payment.id).includes(searchQuery.toLowerCase()) ||
-    String(payment.status).toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const filteredPayments = payments
+    .filter(payment => 
+      (statusFilter === 'all' || payment.status.toLowerCase() === statusFilter) &&
+      (String(payment.id).includes(searchQuery.toLowerCase()) ||
+       String(payment.status).toLowerCase().includes(searchQuery.toLowerCase()))
+    )
+    .sort((a, b) => {
+      const dateA = new Date(a.payment_date);
+      const dateB = new Date(b.payment_date);
+      return dateSort === 'desc' ? dateB - dateA : dateA - dateB;
+    });
 
   const handleSelectPayment = (paymentId) => {
     setSelectedPayments(prevSelectedPayments => 
@@ -63,85 +73,104 @@ const PaymentHistory = () => {
   return (
     <div className="bg-gray-100 min-h-screen">
       <Navbar />
-      <div className="p-3 bg-white flex justify-between items-center">
-        <div className="flex space-x-4">
-          <button
-            onClick={() => console.log('View details for selected payments:', selectedPayments)}
-            disabled={selectedPayments.length === 0}
-            className="flex items-center gap-2 p-2  text-red-600 rounded hover:bg-gray-400"
-          >
-            <FaCreditCard /> View Details
-          </button>
-        </div>
-        <div className="flex items-center border border-gray-300 rounded p-2">
-          <FaSearch className="text-gray-500" />
-          <input
-            type="text"
-            placeholder="Search payments..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="ml-2 p-1 outline-none"
-          />
-        </div>
-      </div>
-      <div className="overflow-x-auto p-2">
-        <table className="min-w-full bg-white border border-gray-200 rounded-lg shadow-md">
-          <thead>
-            <tr className="bg-gray-200">
-              <th className="px-4 py-2 border-b border-gray-300 text-left">
-                <input
-                  type="checkbox"
-                  onChange={() => {
-                    if (selectedPayments.length === payments.length) {
-                      setSelectedPayments([]);
-                    } else {
-                      setSelectedPayments(payments.map(payment => payment.id));
-                    }
-                  }}
-                  checked={selectedPayments.length === payments.length}
-                />
-              </th>
-              <th className="px-4 py-2 border-b border-gray-300 text-left">Payment Method</th>
-              <th className="px-4 py-2 border-b border-gray-300 text-left">Order ID</th>
-              <th className="px-4 py-2 border-b border-gray-300 text-left">Payment Date</th>
-              <th className="px-4 py-2 border-b border-gray-300 text-left">Amount</th>
-              <th className="px-4 py-2 border-b border-gray-300 text-left">Status</th>
-              <th className="px-4 py-2 border-b border-gray-300 text-left">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
+      <div className="container mx-auto px-4 py-8">
+
+        <div className="bg-white rounded-lg shadow-md p-6 mb-8">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6">
+            {/* Search bar */}
+            <div className="relative mb-4 md:mb-0 md:w-1/3">
+              <input
+                type="text"
+                placeholder="Search payments..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+              <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+            </div>
+
+            {/* Filter and Sort */}
+            <div className="flex items-center space-x-4">
+              <button
+                onClick={() => setFilterOpen(!filterOpen)}
+                className="flex items-center space-x-2 px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition duration-300"
+              >
+                <FaFilter />
+                <span>Filter</span>
+                <FaChevronDown className={`transform transition-transform duration-300 ${filterOpen ? 'rotate-180' : ''}`} />
+              </button>
+              <select
+                value={dateSort}
+                onChange={(e) => setDateSort(e.target.value)}
+                className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                <option value="desc">Newest First</option>
+                <option value="asc">Oldest First</option>
+              </select>
+            </div>
+          </div>
+
+          {filterOpen && (
+            <div className="mb-6 p-4 bg-gray-50 rounded-lg">
+              <h3 className="font-semibold mb-2">Filter by Status:</h3>
+              <div className="flex flex-wrap gap-2">
+                {['all', 'completed', 'pending', 'failed'].map(status => (
+                  <button
+                    key={status}
+                    onClick={() => setStatusFilter(status)}
+                    className={`px-3 py-1 rounded-full text-sm ${
+                      statusFilter === status
+                        ? 'bg-blue-500 text-white'
+                        : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                    }`}
+                  >
+                    {status.charAt(0).toUpperCase() + status.slice(1)}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Payments list */}
+          <div className="space-y-4">
             {filteredPayments.map(payment => (
-              <tr key={payment.id} className="hover:bg-gray-50">
-                <td className="px-4 py-2 border-b border-gray-300">
-                  <input
-                    type="checkbox"
-                    checked={selectedPayments.includes(payment.id)}
-                    onChange={() => handleSelectPayment(payment.id)}
-                  />
-                </td>
-                <td className="px-4 py-2 border-b border-gray-300">
-                  <img
-                    src={getPaymentMethodImage(payment.payment_method)}
-                    alt={payment.payment_method}
-                    className="w-8 h-8"
-                  />
-                </td>
-                <td className="px-4 py-2 border-b border-gray-300">{payment.order_id}</td>
-                <td className="px-4 py-2 border-b border-gray-300">{new Date(payment.payment_date).toLocaleDateString()}</td>
-                <td className="px-4 py-2 border-b border-gray-300">${payment.amount}</td>
-                <td className="px-4 py-2 border-b border-gray-300">{payment.status}</td>
-                <td className="px-4 py-2 border-b border-gray-300">
+              <div key={payment.id} className="bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition duration-300">
+                <div className="p-4 flex items-center justify-between">
+                  <div className="flex items-center space-x-4">
+                    <img
+                      src={getPaymentMethodImage(payment.payment_method)}
+                      alt={payment.payment_method}
+                      className="w-10 h-10"
+                    />
+                    <div>
+                      <p className="font-semibold text-gray-800">{payment.order_id}</p>
+                      <p className="text-sm text-gray-500">{new Date(payment.payment_date).toLocaleDateString()}</p>
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <p className="font-bold text-lg text-gray-800">${payment.amount}</p>
+                    <span className={`inline-block px-2 py-1 text-xs font-semibold rounded-full ${
+                      payment.status === 'completed' ? 'bg-green-100 text-green-800' :
+                      payment.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
+                      'bg-red-100 text-red-800'
+                    }`}>
+                      {payment.status}
+                    </span>
+                  </div>
+                </div>
+                <div className="px-4 py-3 bg-gray-50 border-t border-gray-200 flex justify-end">
                   <button
                     onClick={() => console.log('View details for payment ID:', payment.id)}
-                    className="p-2 bg-gray-300 text-white rounded hover:bg-gray-400"
+                    className="flex items-center space-x-2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition duration-300"
                   >
-                    <FaCreditCard />
+                    <FaEye />
+                    <span>View Details</span>
                   </button>
-                </td>
-              </tr>
+                </div>
+              </div>
             ))}
-          </tbody>
-        </table>
+          </div>
+        </div>
       </div>
     </div>
   );

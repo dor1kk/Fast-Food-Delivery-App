@@ -5,6 +5,7 @@ import { AuthContext } from '../../context/authContext';
 const Navbar = () => {
   const { user, logout } = useContext(AuthContext);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const location = useLocation();
 
   const handleLogout = () => {
@@ -15,37 +16,59 @@ const Navbar = () => {
     setDropdownOpen(!dropdownOpen);
   };
 
-  const renderCustomerLinks = () => (
-    <>
-      <Link to="/home" className="text-white px-4 py-2">Home</Link>
-      <Link to="/home/my-orders" className="text-white px-4 py-2">My Orders</Link>
-      <Link to="/home/products" className="text-white px-4 py-2">Products</Link>
-      <Link to="/home/payments-history" className="text-white px-4 py-2">Payments</Link>
-      <Link to="/home/wishlist" className="text-white px-4 py-2">Wishlist</Link>
-    </>
-  );
+  const toggleMobileMenu = () => {
+    setMobileMenuOpen(!mobileMenuOpen);
+  };
 
-  const renderDriverLinks = () => (
-    <>
-      <Link to="/home/driver-dashboard" className="text-white px-4 py-2">Dashboard</Link>
-      <Link to="/home/active-deliveries" className="text-white px-4 py-2">Active Deliveries</Link>
-      <Link to="/home/completed-deliveries" className="text-white px-4 py-2">Completed Deliveries</Link>
-    </>
-  );
+  const renderLinks = (role) => {
+    const links = role === 'customer' 
+      ? [
+          { to: "/home", text: "Home" },
+          { to: "/home/my-orders", text: "My Orders" },
+          { to: "/home/products", text: "Products" },
+          { to: "/home/payments-history", text: "Payments" },
+          { to: "/home/wishlist", text: "Wishlist" },
+        ]
+      : [
+          { to: "/home/driver-dashboard", text: "Dashboard" },
+          { to: "/home/active-deliveries", text: "Active Deliveries" },
+          { to: "/home/completed-deliveries", text: "Completed Deliveries" },
+        ];
+
+    return links.map((link, index) => (
+      <Link 
+        key={index} 
+        to={link.to} 
+        className="block px-4 py-2 text-white hover:bg-red-700 lg:inline-block lg:hover:bg-transparent"
+        onClick={() => setMobileMenuOpen(false)}
+      >
+        {link.text}
+      </Link>
+    ));
+  };
 
   return (
-    <header className="fixed w-full bg-red-600 p-4 flex justify-between items-center relative">
-      <h1 className="text-white text-lg font-bold">Delivery</h1>
-      <div className="flex items-center">
-        {user ? (
-          user.role === 'customer' ? renderCustomerLinks() : renderDriverLinks()
-        ) : (
-          <Link to="/login" className="text-white px-4 py-2">Login</Link>
-        )}
-      </div>
-      {user && (
-        <div className="relative">
-          <div className="flex items-center">
+    <header className=" w-full bg-red-600 p-4 flex flex-wrap justify-between items-center">
+      <div className="flex justify-between items-center w-full">
+        <h1 className="text-white text-lg font-bold">Delivery</h1>
+        
+        {/* Hamburger menu for mobile */}
+        <button
+          className="lg:hidden text-white"
+          onClick={toggleMobileMenu}
+        >
+          ☰
+        </button>
+
+        {/* Desktop menu */}
+        <nav className="hidden lg:flex items-center space-x-4">
+          {user ? renderLinks(user.role) : (
+            <Link to="/login" className="text-white px-4 py-2">Login</Link>
+          )}
+        </nav>
+
+        {user && (
+          <div className="hidden lg:flex items-center ml-4">
             <p className="text-white px-4 py-2">{user.email}</p>
             <div className="relative">
               <button 
@@ -58,12 +81,25 @@ const Navbar = () => {
                 className={`absolute right-0 mt-2 bg-white text-black w-[220px] rounded shadow-lg ${dropdownOpen ? 'block' : 'hidden'}`}
               >
                 <Link to="/home/profile" className="block px-4 py-2 hover:bg-gray-200">Profile Settings</Link>
-                <button onClick={handleLogout} className="block px-4 py-2 hover:bg-gray-200">Logout</button>
+                <button onClick={handleLogout} className="block w-full text-left px-4 py-2 hover:bg-gray-200">Logout</button>
               </div>
             </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
+
+      {/* Mobile menu */}
+      <nav className={`w-full lg:hidden ${mobileMenuOpen ? 'block' : 'hidden'} mt-4`}>
+        {user ? (
+          <>
+            {renderLinks(user.role)}
+            <Link to="/home/profile" className="block px-4 py-2 text-white hover:bg-red-700" onClick={() => setMobileMenuOpen(false)}>Profile Settings</Link>
+            <button onClick={handleLogout} className="block w-full text-left px-4 py-2 text-white hover:bg-red-700">Logout</button>
+          </>
+        ) : (
+          <Link to="/login" className="block px-4 py-2 text-white hover:bg-red-700" onClick={() => setMobileMenuOpen(false)}>Login</Link>
+        )}
+      </nav>
     </header>
   );
 };

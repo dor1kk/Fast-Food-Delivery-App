@@ -63,13 +63,15 @@ const Home = () => {
   };
 
   return (
-    <div className="h-[90vh] flex flex-col items-center justify-start bg-white relative">
-      <div className="absolute top-0 left-0 w-full h-[200px] bg-red-500"></div>
+    <div className="min-h-screen flex flex-col bg-white">
+      <div className="hidden sm:block w-full h-[150px] bg-red-500"></div>
 
-      <div className="relative mt-8 bg-white shadow-lg rounded-lg w-4/5 h-[700px] overflow-hidden z-10">
-        <PerfectScrollbar>
-          {renderContent()}
-        </PerfectScrollbar>
+      <div className="flex-grow px-4 sm:px-6 md:px-8 py-6 sm:-mt-24 md:-mt-32">
+        <div className="bg-white shadow-lg rounded-lg overflow-hidden">
+          <PerfectScrollbar className="max-h-[calc(100vh-20px)] sm:max-h-[calc(100vh-120px)]">
+            {renderContent()}
+          </PerfectScrollbar>
+        </div>
       </div>
     </div>
   );

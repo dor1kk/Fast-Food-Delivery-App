@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 const PaymentForm = ({ order, onClose }) => {
   const [formData, setFormData] = useState({
     orderId: '',
-    paymentMethod: 'Credit Card', // Use the database value
+    paymentMethod: 'Credit Card', 
     amount: '',
     status: 'Pending',
   });

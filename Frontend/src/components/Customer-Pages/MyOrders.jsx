@@ -1,8 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
-import axios from 'axios';
 import { AuthContext } from '../../context/authContext';
 import Navbar from '../layout/navbar';
-import { FaEdit, FaTrash, FaCreditCard, FaSearch } from 'react-icons/fa'; 
+import { FaEdit, FaTrash, FaCreditCard, FaSearch, FaChevronDown } from 'react-icons/fa'; 
 import Payments from '../forms/PaymentForm';
 import { fetchOrders, makePayment } from '../../api/OrdersApi';
 
@@ -59,88 +58,89 @@ const MyOrders = () => {
     order.delivery_address.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
+  const [expandedOrder, setExpandedOrder] = useState(null);
+
   return (
-    <div className="bg-white min-h-screen">
+    <div className="bg-gray-100 min-h-screen">
       <Navbar />
-      <div className="p-3 bg-white flex justify-between items-center">
-        <div className="flex space-x-4">
-        <button
+      <div className="container mx-auto p-4 sm:p-6 lg:p-8">
+        
+        {/* Search bar */}
+        <div className="mb-6">
+          <div className="flex items-center bg-white border border-gray-300 rounded-lg p-2 shadow-sm">
+            <FaSearch className="text-gray-400 mr-2" />
+            <input
+              type="text"
+              placeholder="Search orders..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full outline-none text-gray-700"
+            />
+          </div>
+        </div>
+
+        {/* Action buttons */}
+        <div className="flex flex-wrap gap-4 mb-6">
+          <button
             onClick={handleEdit}
             disabled={selectedOrders.length === 0}
-            className="flex flex-row gap-1 justify-center items-center  text-red-500 rounded "
+            className="flex items-center gap-2 px-4 py-2 bg-gray-400 text-white rounded-lg hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed transition duration-300"
           >
             <FaEdit /> Edit
           </button>
           <button
             onClick={handleDelete}
             disabled={selectedOrders.length === 0}
-            className="flex flex-row gap-1 justify-center items-center  text-red-500 rounded "
+            className="flex items-center gap-2 px-4 py-2 bg-gray-400 text-white rounded-lg hover:bg-red-600 disabled:opacity-50 disabled:cursor-not-allowed transition duration-300"
           >
             <FaTrash /> Delete
           </button>
           <button
             onClick={handleMakePayment}
             disabled={selectedOrders.length === 0}
-            className="flex flex-row gap-1 justify-center items-center  text-red-500 rounded "
+            className="flex items-center gap-2 px-4 py-2 bg-gray-400 text-white rounded-lg hover:bg-green-600 disabled:opacity-50 disabled:cursor-not-allowed transition duration-300"
           >
             <FaCreditCard /> Make Payment
           </button>
         </div>
-        <div className="flex items-center border border-gray-300 rounded p-2">
-          <FaSearch className="text-gray-500" />
-          <input
-            type="text"
-            placeholder="Search orders..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="ml-2 p-1 outline-none"
-          />
+
+        {/* Orders list */}
+        <div className="bg-white rounded-lg shadow-md overflow-hidden">
+          {filteredOrders.map(order => (
+            <div key={order.id} className="border-b border-gray-200 last:border-b-0">
+              <div 
+                className="flex items-center justify-between p-4 cursor-pointer hover:bg-gray-50"
+                onClick={() => setExpandedOrder(expandedOrder === order.id ? null : order.id)}
+              >
+                <div className="flex items-center space-x-4">
+                  <input
+                    type="checkbox"
+                    checked={selectedOrders.includes(order.id)}
+                    onChange={() => handleSelectOrder(order.id)}
+                    onClick={(e) => e.stopPropagation()}
+                    className="h-5 w-5 text-blue-600"
+                  />
+                  <img src={order.image_url} className="h-16 w-16 object-cover rounded-md" alt="Order" />
+                  <div>
+                    <h3 className="font-semibold text-gray-800">{order.name}</h3>
+                    <p className="text-sm text-gray-500">{new Date(order.order_date).toLocaleDateString()}</p>
+                  </div>
+                </div>
+                <div className="flex items-center space-x-4">
+                  <span className="font-bold text-green-600">${order.total_price}</span>
+                  <FaChevronDown className={`text-gray-400 transition-transform duration-300 ${expandedOrder === order.id ? 'transform rotate-180' : ''}`} />
+                </div>
+              </div>
+              {expandedOrder === order.id && (
+                <div className="p-4 bg-gray-50">
+                  <p className="text-gray-700"><span className="font-semibold">Delivery Address:</span> {order.delivery_address}</p>
+                  {/* Add more order details here */}
+                </div>
+              )}
+            </div>
+          ))}
         </div>
       </div>
-      <table className="min-w-full bg-white border border-gray-200 rounded-lg shadow-md">
-        <thead>
-          <tr className="bg-gray-100">
-            <th className="px-4 py-2 border-b border-gray-300 text-left">
-              <input
-                type="checkbox"
-                onChange={() => {
-                  if (selectedOrders.length === orders.length) {
-                    setSelectedOrders([]);
-                  } else {
-                    setSelectedOrders(orders.map(order => order.id));
-                  }
-                }}
-                checked={selectedOrders.length === orders.length}
-              />
-            </th>
-            <th className="px-4 py-2 border-b border-gray-300 text-left">Image</th>
-            <th className="px-4 py-2 border-b border-gray-300 text-left">Name</th>
-            <th className="px-4 py-2 border-b border-gray-300 text-left">Order Date</th>
-            <th className="px-4 py-2 border-b border-gray-300 text-left">Total Price</th>
-            <th className="px-4 py-2 border-b border-gray-300 text-left">Delivery Address</th>
-          </tr>
-        </thead>
-        <tbody>
-          {filteredOrders.map(order => (
-            <tr key={order.id} className="hover:bg-gray-50">
-              <td className="px-4 py-2 border-b border-gray-300">
-                <input
-                  type="checkbox"
-                  checked={selectedOrders.includes(order.id)}
-                  onChange={() => handleSelectOrder(order.id)}
-                />
-              </td>
-              <td className="px-4 py-2 border-b border-gray-300">
-                <img src={order.image_url} className='h-16 w-16' alt="Order" />
-              </td>
-              <td className="px-4 py-2 border-b border-gray-300">{order.name}</td>
-              <td className="px-4 py-2 border-b border-gray-300">{new Date(order.order_date).toLocaleString()}</td>
-              <td className="px-4 py-2 border-b border-gray-300">${order.total_price}</td>
-              <td className="px-4 py-2 border-b border-gray-300">{order.delivery_address}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
 
       {selectedOrder && (
         <Payments

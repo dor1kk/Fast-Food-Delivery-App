@@ -4,37 +4,56 @@ const authenticateToken = require('../config/auth');
 
 const router = express.Router();
 
+
 router.post('/payment', (req, res) => {
-    const { orderId, paymentMethod, amount, status } = req.body;
-    console.log('Received payment data:', { orderId, paymentMethod, amount, status }); 
+  const { orderId, paymentMethod, amount, status } = req.body;
+  console.log('Received payment data:', { orderId, paymentMethod, amount, status }); 
+
+  const paymentQuery = `INSERT INTO payments (order_id, payment_method, amount, status) VALUES (?, ?, ?, ?)`;
+
+  db.query(paymentQuery, [orderId, paymentMethod, amount, status], (err, paymentResult) => {
+    if (err) {
+      console.error('Error saving payment:', err);
+      return res.status(500).send('Error saving payment');
+    } 
+
+    // Fetch drivers by role
+    const driversQuery = 'SELECT id FROM users WHERE role = ?';
     
-    const paymentQuery = `INSERT INTO payments (order_id, payment_method, amount, status) VALUES (?, ?, ?, ?)`;
-  
-    db.query(paymentQuery, [orderId, paymentMethod, amount, status], (err, paymentResult) => {
+    db.query(driversQuery, ['driver'], (err, driversResult) => {
       if (err) {
-        console.error('Error saving payment:', err);
-        return res.status(500).send('Error saving payment');
-      } 
-  
-      const driverId = 1;
+        console.error('Error fetching drivers:', err);
+        return res.status(500).send('Error fetching drivers');
+      }
+
+      if (driversResult.length === 0) {
+        return res.status(404).send('No drivers found');
+      }
+
+      // Insert delivery records for all drivers
       const deliveryStatus = 'Assigned';  
-      const assignedTime = new Date();   
-  
+      const assignedTime = new Date(); 
+
       const deliveryQuery = `
         INSERT INTO deliveries (order_id, driver_id, status, assigned_time) 
-        VALUES (?, ?, ?, ?)
+        VALUES ?
       `;
-      
-      db.query(deliveryQuery, [orderId, driverId, deliveryStatus, assignedTime], (err, deliveryResult) => {
+
+      // Prepare values for insertion
+      const deliveryValues = driversResult.map(driver => [orderId, driver.id, deliveryStatus, assignedTime]);
+
+      db.query(deliveryQuery, [deliveryValues], (err, deliveryResult) => {
         if (err) {
-          console.error('Error saving delivery:', err);
-          return res.status(500).send('Error saving delivery');
+          console.error('Error saving deliveries:', err);
+          return res.status(500).send('Error saving deliveries');
         }
-  
-        res.status(200).send('Payment and delivery saved successfully');
+
+        res.status(200).send('Payment and deliveries saved successfully');
       });
     });
   });
+});
+
   
 
 
