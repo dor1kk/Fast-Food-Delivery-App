@@ -24,8 +24,9 @@ const Navbar = () => {
     const links = role === 'customer' 
       ? [
           { to: "/home", text: "Home" },
-          { to: "/home/my-orders", text: "My Orders" },
           { to: "/home/products", text: "Products" },
+          { to: "/home/my-orders", text: "My Orders" },
+     
           { to: "/home/payments-history", text: "Payments" },
           { to: "/home/wishlist", text: "Wishlist" },
         ]
@@ -33,6 +34,8 @@ const Navbar = () => {
           { to: "/home/driver-dashboard", text: "Dashboard" },
           { to: "/home/active-deliveries", text: "Active Deliveries" },
           { to: "/home/completed-deliveries", text: "Completed Deliveries" },
+          { to: "/home/map", text: "Map" },
+
         ];
 
     return links.map((link, index) => (

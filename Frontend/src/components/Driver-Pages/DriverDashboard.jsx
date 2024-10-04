@@ -84,10 +84,10 @@ const DriverDashboard = () => {
         
         {/* Summary Cards */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
-          <SummaryCard icon={<FaTruck />} title="Deliveries" value={summaryData.totalDeliveries} color="bg-blue-500" />
-          <SummaryCard icon={<FaMoneyBillWave />} title="Earnings" value={`$${summaryData.totalEarnings}`} color="bg-green-500" />
-          <SummaryCard icon={<FaStar />} title="Avg Rating" value={summaryData.averageRating} color="bg-yellow-500" />
-          <SummaryCard icon={<FaClipboardList />} title="Completion" value={`${summaryData.completionRate}%`} color="bg-purple-500" />
+          <SummaryCard icon={<FaTruck />} title="Deliveries" value={summaryData.totalDeliveries} color="bg-white text-gray-400" />
+          <SummaryCard icon={<FaMoneyBillWave />} title="Earnings" value={`$${summaryData.totalEarnings}`} color="bg-white text-gray-400" />
+          <SummaryCard icon={<FaStar />} title="Avg Rating" value={summaryData.averageRating} color="bg-white text-gray-400" />
+          <SummaryCard icon={<FaClipboardList />} title="Completion" value={`${summaryData.completionRate}%`} color="bg-white text-gray-400" />
         </div>
 
         {/* Charts */}

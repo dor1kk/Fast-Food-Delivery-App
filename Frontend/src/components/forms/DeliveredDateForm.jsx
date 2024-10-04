@@ -1,15 +1,45 @@
 // DeliveryModal.js
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
+import { AuthContext } from '../../context/authContext';
 
-const DeliveryModal = ({ isOpen, onClose, onSave, delivery, setDeliveredTime }) => {
+const DeliveryModal = ({ isOpen, onClose, delivery }) => {
   const [status, setStatus] = useState(delivery.delivery_status);
+  const [deliveredTime, setDeliveredTime]=useState('');
+
+  const { authToken } = useContext(AuthContext);
+
 
   if (!isOpen) return null;
 
-  const handleSave = () => {
-    onSave(delivery, status);
-    setStatus(delivery.delivery_status); // Reset status after saving
+  const handleSave = async () => {
+    try {
+      const updateStatus = await fetch(`http://localhost:8080/deliveries/${delivery.id}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${authToken}`,
+        },
+        body: JSON.stringify({
+          delivered_time: deliveredTime || delivery.delivered_time, 
+          delivery_status: status 
+        }),
+      });
+  
+      const contentType = updateStatus.headers.get("Content-Type");
+  
+      if (contentType && contentType.includes("application/json")) {
+        const result = await updateStatus.json();
+        console.log("Update successful:", result);
+      } else {
+        const textResult = await updateStatus.text(); 
+        console.log("Update successful:", textResult);
+      }
+  
+    } catch (error) {
+      console.error("Error updating delivery status:", error);
+    }
   };
+  
 
   return (
     <>
@@ -38,7 +68,6 @@ const DeliveryModal = ({ isOpen, onClose, onSave, delivery, setDeliveredTime }) 
               className="w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
             >
               <option value="Assigned">Assigned</option>
-              <option value="Out for Delivery">Out for Delivery</option>
               <option value="Delivered">Delivered</option>
             </select>
           </div>

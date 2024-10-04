@@ -63,6 +63,7 @@ const Home = () => {
             return <ActiveDeliveries />;
           case '/home/completed-deliveries':
             return <CompletedDeliveries />;
+  
           default:
             return <HomePage />;
         }
@@ -74,17 +75,15 @@ const Home = () => {
   const content = renderContent();
 
   return (
-    <div className="min-h-screen flex flex-col bg-white">
-      <div className="hidden sm:block w-full h-[150px] bg-red-500"></div>
-
-      <div className="flex-grow  sm:px-6 md:px-8 p-4 sm:-mt-24 md:-mt-32">
-        <div className="bg-white shadow-lg rounded-lg overflow-hidden">
+    <div className="h-screen flex flex-col"> {/* Changed min-h-screen to h-screen */}
+      <div className="flex-grow p-0"> {/* Removed padding to ensure full height */}
+        <div className="overflow-hidden h-full"> {/* Set height to full */}
           {isMobile ? (
-            <div className="max-h-[calc(100vh-20px)] overflow-y-auto">
+            <div className="h-full overflow-y-auto"> {/* Set height to full */}
               {content}
             </div>
           ) : (
-            <PerfectScrollbar className="max-h-[calc(100vh-120px)]">
+            <PerfectScrollbar className="h-full"> {/* Set height to full */}
               {content}
             </PerfectScrollbar>
           )}

@@ -33,6 +33,7 @@ function App() {
             <Route path="active-deliveries" element={<ProtectedRoute element={<ActiveDeliveries />} />} />
             <Route path="completed-deliveries" element={<ProtectedRoute element={<CompletedDeliveries />} />} />
             <Route path="profile" element={<ProtectedRoute element={<Profile />} />} />
+
           </Route>
 
           {/* Protect admin routes */}

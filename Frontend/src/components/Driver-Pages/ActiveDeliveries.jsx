@@ -15,7 +15,6 @@ const ActiveDeliveries = () => {
   const [filterStatus, setFilterStatus] = useState('all');
   const { authToken } = useContext(AuthContext);
 
-  // Bill modal state
   const [showBillModal, setShowBillModal] = useState(false);
   const [selectedBillDelivery, setSelectedBillDelivery] = useState(null);
   const billRef = useRef();
@@ -58,6 +57,8 @@ const ActiveDeliveries = () => {
     }
   };
 
+
+
   const openModal = (delivery) => {
     setSelectedDelivery(delivery);
     setIsModalOpen(true);
@@ -89,6 +90,7 @@ const ActiveDeliveries = () => {
     <div className="bg-gray-100 min-h-screen">
       <Navbar />
       <div className="container mx-auto p-4 sm:p-6 lg:p-8">
+        <h1 className="text-3xl font-bold text-gray-800 mb-6">Deliveries</h1>
         
         <div className="mb-6 flex flex-col sm:flex-row justify-between items-center">
           <div className="relative w-full sm:w-64 mb-4 sm:mb-0">
@@ -102,7 +104,7 @@ const ActiveDeliveries = () => {
             <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
           </div>
           <div className="flex space-x-2">
-            {['all', 'assigned', 'in progress', 'Completed'].map((status) => (
+            {['all', 'assigned', 'delivered'].map((status) => (
               <button
                 key={status}
                 onClick={() => setFilterStatus(status)}
@@ -149,12 +151,12 @@ const ActiveDeliveries = () => {
       </div>
 
       {selectedDelivery && (
-        <DeliveryModal
-          isOpen={isModalOpen}
-          onClose={closeModal}
-          delivery={selectedDelivery}
-        />
-      )}
+       <DeliveryModal
+        isOpen={isModalOpen}
+        onClose={closeModal}
+        delivery={selectedDelivery}
+          />
+          )}
 
       {showBillModal && selectedBillDelivery && (
         <BillModal
@@ -200,7 +202,7 @@ const DeliveryCard = ({ delivery, openModal, openBillModal }) => {
           {delivery.delivery_status === 'Assigned' && (
             <button
               onClick={() => openBillModal(delivery)}
-              className="bg-gray-400 text-white py-2 px-4 rounded-md hover:bg-gray-500 transition duration-300 flex items-center"
+              className="bg-gray-400 text-white py-2 px-4 rounded-md hover:bg-green-600 transition duration-300 flex items-center"
             >
               <FaFileInvoice className="mr-2" />
               Bill

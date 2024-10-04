@@ -39,7 +39,7 @@ const PaymentForm = ({ order, onClose }) => {
     };
     setFormData({
       ...formData,
-      paymentMethod: methodMapping[methodId] || 'Credit Card', // Default to 'Credit Card'
+      paymentMethod: methodMapping[methodId] || 'Credit Card',
     });
   };
 

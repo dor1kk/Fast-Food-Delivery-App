@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Navbar from '../layout/navbar';
 import Orders from '../forms/OrderForm';
 import { FaHeart, FaShoppingCart } from 'react-icons/fa';
+import { fetchProducts } from '../../api/ProductApi';
 
 const Products = () => {
   const [products, setProducts] = useState([]);
@@ -12,24 +13,13 @@ const Products = () => {
   const [selectedCategory, setSelectedCategory] = useState('all');
 
   useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const response = await fetch('http://localhost:8080/products');
-        if (response.ok) {
-          const data = await response.json();
-          setProducts(data);
-          setFilteredProducts(data);
-        } else {
-          console.error('Failed to fetch products:', await response.text());
-        }
-      } catch (error) {
-        console.error('Error fetching products:', error);
-      }
-    };
-
-    fetchProducts();
+    fetchProducts()
+      .then(data => {
+        setProducts(data);  
+        setFilteredProducts(data);
+      })
+      .catch(error => console.error('Failed to fetch products:', error));
   }, []);
-
   useEffect(() => {
     let filtered = products;
 

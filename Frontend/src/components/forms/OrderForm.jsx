@@ -4,6 +4,7 @@ import { submitOrder } from '../../api/OrdersApi';
 
 const OrderForm = ({ product, onClose }) => {
   const { authToken, user } = useContext(AuthContext); 
+  console.log('User name :', user);
   console.log('Retrieved Token:', authToken);
 
   const [orderDetails, setOrderDetails] = useState({
@@ -122,20 +123,7 @@ const OrderForm = ({ product, onClose }) => {
                 onChange={handleChange}
               />
             </div>
-            <div className="mt-4">
-              <label className="block text-sm font-medium">Order Status:</label>
-              <select
-                name="status"
-                className="w-full border rounded p-2 mt-1"
-                value={orderDetails.status}
-                onChange={handleChange}
-              >
-                <option value="Pending">Pending</option>
-                <option value="In Progress">In Progress</option>
-                <option value="Delivered">Delivered</option>
-                <option value="Cancelled">Cancelled</option>
-              </select>
-            </div>
+           
           </div>
         </div>
         <div className="mt-6 flex justify-end">
