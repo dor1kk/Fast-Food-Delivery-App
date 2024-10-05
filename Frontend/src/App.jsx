@@ -15,6 +15,7 @@ import Profile from './components/Customer-Pages/Profile';
 import Login from './components/auth/login';
 import Register from './components/auth/register';
 import ProtectedRoute from './components/layout/protectedRoute';
+import Favorites from './components/Customer-Pages/Favorites';
 
 function App() {
   return (
@@ -33,6 +34,7 @@ function App() {
             <Route path="active-deliveries" element={<ProtectedRoute element={<ActiveDeliveries />} />} />
             <Route path="completed-deliveries" element={<ProtectedRoute element={<CompletedDeliveries />} />} />
             <Route path="profile" element={<ProtectedRoute element={<Profile />} />} />
+            <Route path='favorites' element={<Favorites />}></Route>
 
           </Route>
 

@@ -59,7 +59,7 @@ const HomePage = () => {
                 placeholder="Search for food..." 
                 className="py-3 px-6 pr-12 rounded-full text-black w-64 sm:w-80 focus:outline-none focus:ring-2 focus:ring-yellow-400"
                 value={searchQuery}
-                onChange={e => setSearchQuery(e.target.value)} // Update search query
+                onChange={e => setSearchQuery(e.target.value)} 
               />
               <button onClick={handleSearch}>
                 <FaSearch className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400" />

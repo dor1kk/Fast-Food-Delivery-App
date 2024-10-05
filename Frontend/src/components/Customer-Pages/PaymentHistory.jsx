@@ -71,13 +71,12 @@ const PaymentHistory = () => {
   };
 
   return (
-    <div className="bg-gray-100 min-h-screen">
+    <div className="bg-gray-50 min-h-screen">
       <Navbar />
       <div className="container mx-auto px-4 py-8">
 
-        <div className="bg-white rounded-lg shadow-md p-6 mb-8">
+        <div className="bg-gray-50 rounded-lg  p-6 mb-8">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6">
-            {/* Search bar */}
             <div className="relative mb-4 md:mb-0 md:w-1/3">
               <input
                 type="text"
@@ -89,16 +88,8 @@ const PaymentHistory = () => {
               <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
             </div>
 
-            {/* Filter and Sort */}
             <div className="flex items-center space-x-4">
-              <button
-                onClick={() => setFilterOpen(!filterOpen)}
-                className="flex items-center space-x-2 px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition duration-300"
-              >
-                <FaFilter />
-                <span>Filter</span>
-                <FaChevronDown className={`transform transition-transform duration-300 ${filterOpen ? 'rotate-180' : ''}`} />
-              </button>
+         
               <select
                 value={dateSort}
                 onChange={(e) => setDateSort(e.target.value)}
@@ -110,7 +101,7 @@ const PaymentHistory = () => {
             </div>
           </div>
 
-          {filterOpen && (
+         
             <div className="mb-6 p-4 bg-gray-50 rounded-lg">
               <h3 className="font-semibold mb-2">Filter by Status:</h3>
               <div className="flex flex-wrap gap-2">
@@ -120,7 +111,7 @@ const PaymentHistory = () => {
                     onClick={() => setStatusFilter(status)}
                     className={`px-3 py-1 rounded-full text-sm ${
                       statusFilter === status
-                        ? 'bg-blue-500 text-white'
+                        ? 'bg-red-500 text-white'
                         : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
                     }`}
                   >
@@ -129,7 +120,7 @@ const PaymentHistory = () => {
                 ))}
               </div>
             </div>
-          )}
+          
 
           {/* Payments list */}
           <div className="space-y-4">
@@ -150,23 +141,15 @@ const PaymentHistory = () => {
                   <div className="text-right">
                     <p className="font-bold text-lg text-gray-800">${payment.amount}</p>
                     <span className={`inline-block px-2 py-1 text-xs font-semibold rounded-full ${
-                      payment.status === 'completed' ? 'bg-green-100 text-green-800' :
-                      payment.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
-                      'bg-red-100 text-red-800'
+                      payment.status === 'Completed' ? 'bg-green-100 text-green-800' :
+                      payment.status === 'Pending' ? 'bg-yellow-100 text-yellow-800' :
+                      'bg-green-100 text-red-800'
                     }`}>
                       {payment.status}
                     </span>
                   </div>
                 </div>
-                <div className="px-4 py-3 bg-gray-50 border-t border-gray-200 flex justify-end">
-                  <button
-                    onClick={() => console.log('View details for payment ID:', payment.id)}
-                    className="flex items-center space-x-2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition duration-300"
-                  >
-                    <FaEye />
-                    <span>View Details</span>
-                  </button>
-                </div>
+               
               </div>
             ))}
           </div>

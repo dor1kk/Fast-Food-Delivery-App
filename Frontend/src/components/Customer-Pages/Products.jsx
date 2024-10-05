@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import Navbar from '../layout/navbar';
 import Orders from '../forms/OrderForm';
 import { FaHeart, FaShoppingCart } from 'react-icons/fa';
-import { fetchProducts } from '../../api/ProductApi';
+import { AddToFavorite, fetchProducts } from '../../api/ProductApi';
+import { AuthContext } from '../../context/authContext';
 
 const Products = () => {
   const [products, setProducts] = useState([]);
@@ -11,6 +12,9 @@ const Products = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
+
+  const { authToken } = useContext(AuthContext);
+
 
   useEffect(() => {
     fetchProducts()
@@ -47,6 +51,22 @@ const Products = () => {
     setIsModalOpen(false);
     setSelectedProduct(null);
   };
+
+  const handleAddFavorite = async (id) => {
+    try {
+      const response = await AddToFavorite(id, authToken);
+  
+      if (response.error === "Product is already in favorites") {
+        alert('You have already added this product to the favorites.');
+      } else if (response.message === "Product added successfully") {
+        alert('Product is added successfully to the favorites page!');
+      }
+    } catch (error) {
+      console.log('Error:', error);
+    }
+  };
+  
+  
 
   return (
     <div className="min-h-screen bg-gray-100">
@@ -104,7 +124,7 @@ const Products = () => {
                 <div className="flex justify-between items-center">
                   <button className="flex items-center space-x-1 text-gray-500 hover:text-red-500">
                     <FaHeart />
-                    <span>Wishlist</span>
+                    <button onClick={()=>handleAddFavorite(product.id)}>Favorite</button>
                   </button>
                   <button 
                     onClick={() => openModal(product)}

@@ -1,22 +1,20 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import PerfectScrollbar from 'react-perfect-scrollbar';
-import 'react-perfect-scrollbar/dist/css/styles.css'; // Import the library styles
-import Orders from './forms/OrderForm';
+import 'react-perfect-scrollbar/dist/css/styles.css'; 
 import Products from './Customer-Pages/Products';
 import MyOrders from './Customer-Pages/MyOrders';
 import HomePage from './Customer-Pages/HomePage';
-import Payments from './forms/PaymentForm';
-import Wishlist from './Customer-Pages/Wishlist';
 import PaymentHistory from './Customer-Pages/PaymentHistory';
-import { AuthContext } from '../context/authContext'; // Import AuthContext
+import { AuthContext } from '../context/authContext'; 
 import Dashboard from './Driver-Pages/DriverDashboard';
 import ActiveDeliveries from './Driver-Pages/ActiveDeliveries';
 import CompletedDeliveries from './Driver-Pages/CompletedDeliveries';
 import Profile from './Customer-Pages/Profile';
+import Favorites from './Customer-Pages/Favorites';
 
 const Home = () => {
-  const { user } = useContext(AuthContext); // Access user from AuthContext
+  const { user } = useContext(AuthContext); 
   const location = useLocation();
   const email = location.state?.email;
   const [isMobile, setIsMobile] = useState(window.innerWidth < 640);
@@ -48,8 +46,8 @@ const Home = () => {
             return <Products />;
           case '/home/payments-history':
             return <PaymentHistory />;
-          case '/home/wishlist':
-            return <Wishlist />;
+          case '/home/favorites':
+            return <Favorites />;
           case '/home/profile':
             return <Profile />;
           default:

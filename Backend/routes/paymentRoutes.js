@@ -28,7 +28,6 @@ router.post('/payment', (req, res) => {
         return res.status(500).send('Error updating order status');
       }
 
-      // Fetch drivers by role
       const driversQuery = 'SELECT id FROM users WHERE role = ?';
 
       db.query(driversQuery, ['driver'], (err, driversResult) => {

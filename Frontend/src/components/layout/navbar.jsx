@@ -28,7 +28,7 @@ const Navbar = () => {
           { to: "/home/my-orders", text: "My Orders" },
      
           { to: "/home/payments-history", text: "Payments" },
-          { to: "/home/wishlist", text: "Wishlist" },
+          { to: "/home/favorites", text: "Favorites" },
         ]
       : [
           { to: "/home/driver-dashboard", text: "Dashboard" },
