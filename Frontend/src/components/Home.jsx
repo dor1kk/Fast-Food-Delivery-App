@@ -28,10 +28,8 @@ const Home = () => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  // Log the user role to console
   console.log('User role:', user?.role);
 
-  // Define role-based content rendering
   const renderContent = () => {
     if (!user) {
       return <HomePage />; // Default to HomePage if no user info is available
@@ -73,15 +71,15 @@ const Home = () => {
   const content = renderContent();
 
   return (
-    <div className="h-screen flex flex-col"> {/* Changed min-h-screen to h-screen */}
-      <div className="flex-grow p-0"> {/* Removed padding to ensure full height */}
-        <div className="overflow-hidden h-full"> {/* Set height to full */}
+    <div className="h-screen flex flex-col"> 
+      <div className="flex-grow p-0"> 
+        <div className="overflow-hidden h-full">
           {isMobile ? (
-            <div className="h-full overflow-y-auto"> {/* Set height to full */}
+            <div className="h-full overflow-y-auto"> 
               {content}
             </div>
           ) : (
-            <PerfectScrollbar className="h-full"> {/* Set height to full */}
+            <PerfectScrollbar className="h-full"> 
               {content}
             </PerfectScrollbar>
           )}

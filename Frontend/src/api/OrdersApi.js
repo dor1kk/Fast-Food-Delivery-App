@@ -52,6 +52,29 @@ export const fetchOrders = async (authToken) => {
   }
 };
 
+
+export const fetchAllOrders = async (authToken) => {
+  try {
+    const response = await axios.get('http://localhost:8080/orders/all-orders', {
+      headers: { Authorization: `Bearer ${authToken}` },
+    });
+    if (Array.isArray(response.data)) {
+      return response.data;
+    } else {
+      console.error('Expected an array of orders, but got:', response.data);
+      return [];
+    }
+  } catch (error) {
+    console.error('Error fetching orders:', error);
+    if (error.response) {
+      console.error('Response error:', error.response.data);
+    }
+    throw error;
+  }
+};
+
+
+
 export const makePayment = async (orderId, authToken) => {
   try {
     const response = await axios.post(`http://localhost:8080/orders/${orderId}/pay`, {}, {

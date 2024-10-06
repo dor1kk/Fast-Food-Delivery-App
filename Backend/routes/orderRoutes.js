@@ -55,4 +55,19 @@ router.get('/customer-orders', authenticateToken, (req, res) => {
     });
   });
 
+
+
+
+
+  router.get('/all-orders', (req, res) => {
+  
+    db.query('SELECT * FROM orders o inner join users u on o.customer_id=u.id', (err, results) => {
+      if (err) {
+        console.error('Error fetching orders:', err.message);
+        return res.status(500).json({ message: 'Server error' });
+      }
+      res.json(results);
+    });
+  });
+
 module.exports = router;

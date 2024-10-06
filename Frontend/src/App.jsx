@@ -16,6 +16,12 @@ import Login from './components/auth/login';
 import Register from './components/auth/register';
 import ProtectedRoute from './components/layout/protectedRoute';
 import Favorites from './components/Customer-Pages/Favorites';
+import ManageCategories from './components/Admin/ManageCategories';
+import ManageProducts from './components/Admin/ManageProducts';
+import ManageCustomers from './components/Admin/ManageCustomers';
+import ManageDrivers from './components/Admin/ManageDrivers';
+import Analytics from './components/Admin/Analytics';
+import ManageOrders from './components/Admin/ManageOrders';
 
 function App() {
   return (
@@ -40,7 +46,14 @@ function App() {
 
           {/* Protect admin routes */}
           <Route path="/admin" element={<ProtectedRoute element={<AdminHome />} />} >
-            <Route path="dashboard" element={<ProtectedRoute element={<Dashboard />} />} />
+          <Route path="dashboard" element={<ProtectedRoute element={<Dashboard />} />} />
+          <Route path="categories" element={<ProtectedRoute element={<ManageCategories/>} />} />
+          <Route path="products" element={<ProtectedRoute element={<ManageProducts />} />} />
+          <Route path="customers" element={<ProtectedRoute element={<ManageCustomers />} />} />
+          <Route path="drivers" element={<ProtectedRoute element={<ManageDrivers/>} />} />
+          <Route path="orders" element={<ProtectedRoute element={<ManageOrders/>} />} />
+          <Route path="analytics" element={<ProtectedRoute element={<Analytics />} />} />
+            
           </Route>
 
           {/* Default home route */}

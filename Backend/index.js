@@ -15,12 +15,14 @@ const productRoutes = require('./routes/productRoutes');
 const orderRoutes = require('./routes/orderRoutes');
 const paymentRoutes=require('./routes/paymentRoutes')
 const deliveryRoutes=require('./routes/deliveriesRoutes')
+const usersRoutes=require('./routes/usersRoutes')
 
 app.use('/api', authRoutes);
 app.use('/products', productRoutes);
 app.use('/orders', orderRoutes);
 app.use('/payments', paymentRoutes);
 app.use('/deliveries',deliveryRoutes);
+app.use('/users',usersRoutes);
 
 const PORT = 8080;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
